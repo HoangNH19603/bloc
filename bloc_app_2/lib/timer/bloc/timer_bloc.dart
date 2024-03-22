@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 
 sealed class TimerEvent {}
 
+final class TimerStart extends TimerEvent {}
+
 final class TimerEventChange extends TimerEvent {}
 
 class TimerBloc extends Bloc<TimerEvent, DateTime> {

@@ -8,11 +8,19 @@ class TimerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: BlocBuilder<TimerCubit, DateTime>(
-        builder: (context, state) {
-          return Text('${state.hour}:${state.minute}:${state.second}', style: Theme.of(context).textTheme.displayMedium);
-        },
-      )),
+      body: Center(
+        child: BlocBuilder<TimerCubit, DateTime>(
+          builder: (context, state) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('${state.day}/${state.month}/${state.year}', style: Theme.of(context).textTheme.displayMedium),
+                Text('${state.hour < 10 ? "0${state.hour}" : state.hour}:${state.minute < 10 ? "0${state.minute}" : state.minute}:${state.second < 10 ? "0${state.second}" : state.second}', style: Theme.of(context).textTheme.displayMedium),
+              ],
+            );
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         onPressed: () => context.read<TimerCubit>().getTime(),

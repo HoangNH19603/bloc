@@ -1,4 +1,4 @@
-  import 'package:bloc_app_2/timer/timer.dart';
+import 'package:bloc_app_2/timer/timer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
