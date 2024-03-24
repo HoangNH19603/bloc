@@ -21,9 +21,26 @@ class TimerView extends StatelessWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () => context.read<TimerCubit>().getTime(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: const Icon(Icons.stop),
+            onPressed: () => context.read<TimerCubit>().close(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: FloatingActionButton(
+              child: const Icon(Icons.sync),
+              onPressed: () => context.read<TimerCubit>().timeTicker(),
+            ),
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.refresh),
+            onPressed: () => context.read<TimerCubit>().getTime(),
+          ),
+        ],
       )
     );
   }

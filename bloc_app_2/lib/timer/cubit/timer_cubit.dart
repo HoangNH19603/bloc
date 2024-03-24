@@ -5,6 +5,8 @@ class TimerCubit extends Cubit<DateTime> {
 
   void getTime() => emit(DateTime.now());
 
+  Stream<void> timeTicker() => Stream.periodic(const Duration(seconds: 1), (_) => getTime());
+
   @override
   void onChange(Change<DateTime> change) {
     super.onChange(change);
