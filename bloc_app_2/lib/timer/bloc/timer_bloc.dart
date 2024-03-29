@@ -1,38 +1,66 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+import 'package:bloc_app_2/ticker.dart';
+import 'package:equatable/equatable.dart';
 
-sealed class TimerEvent {}
+part 'timer_events.dart';
+part 'timer_states.dart';
 
-final class TimerStart extends TimerEvent {}
-
-final class TimerEventChange extends TimerEvent {}
-
-class TimerBloc extends Bloc<TimerEvent, DateTime> {
-  TimerBloc() : super(DateTime.now()) {
-    on<TimerEvent>((event, emit) => emit(DateTime.now()));
+class TimerBloc extends Bloc<TimerEvent, TimerState> {
+  TimerBloc({required Ticker ticker})
+      : _ticker = ticker,
+        super(const TimerInitial(_duration)) {
+    on<TimerStarted>(_onStarted);
+    on<TimerPaused>(_onPaused);
+    on<TimerResumed>(_onResumed);
+    on<TimerReset>(_onReset);
+    on<_TimerTicked>(_onTicked);
   }
 
-  @override
-  void onChange(Change<DateTime> change) {
-    super.onChange(change);
-    print('$change');
-  }
+  final Ticker _ticker;
+  static const int _duration = 60;
+
+  StreamSubscription<int>? _tickerSubscription;
 
   @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-    print('$error, $stackTrace');
+  Future<void> close() {
+    _tickerSubscription?.cancel();
+    return super.close();
   }
 
-  // onTransition is invoked before onChange and contains the event which triggered the change from currentState to nextState.
-  @override
-  void onTransition(Transition<TimerEvent, DateTime> transition) {
-    super.onTransition(transition);
-    print(transition);
+  void _onStarted(TimerStarted event, Emitter<TimerState> emit) {
+    emit(TimerRunInProgress(event.duration));
+    _tickerSubscription?.cancel();
+    _tickerSubscription = _ticker
+        .tick(tick: event.duration)
+        .listen((duration) => add(_TimerTicked(duration: duration)));
   }
 
-  @override
-  void onEvent(TimerEvent event) {
-    super.onEvent(event);
-    print(event);
+  void _onPaused(TimerPaused event, Emitter<TimerState> emit) {
+    if (state is TimerRunInProgress) {
+      _tickerSubscription?.pause();
+      emit(TimerRunPause(state.duration));
+    }
+  }
+
+  void _onResumed(TimerResumed resume, Emitter<TimerState> emit) {
+    if (state is TimerRunPause) {
+      _tickerSubscription?.resume();
+      emit(TimerRunInProgress(state.duration));
+    }
+  }
+
+  void _onReset(TimerReset event, Emitter<TimerState> emit) {
+    _tickerSubscription?.cancel();
+    emit(const TimerInitial(_duration));
+  }
+
+  void _onTicked(_TimerTicked event, Emitter<TimerState> emit) {
+    emit(
+      event.duration > 0
+          ? TimerRunInProgress(event.duration)
+          : const TimerRunComplete(),
+    );
   }
 }
