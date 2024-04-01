@@ -25,4 +25,11 @@ final class TimeProcess extends TimeState {
   List<Object> get props => [timeTicker];
 }
 
-final class TimeRunPause extends TimeState {}
+final class TimeRunPause extends TimeState {
+  final DateTime timeTicker;
+
+  const TimeRunPause({required this.timeTicker});
+
+  @override
+  List<Object> get props => [timeTicker];
+}

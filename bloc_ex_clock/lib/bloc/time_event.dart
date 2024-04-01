@@ -1,12 +1,17 @@
 part of 'time_bloc.dart';
 
-sealed class TimeEvent extends Equatable {
+sealed class TimeEvent {
   const TimeEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
-class TimeStart extends TimeEvent {}
-class TimeTicker extends TimeEvent {}
+class TimeStart extends TimeEvent {
+  final DateTime tick;
+  const TimeStart({required this.tick});
+}
+
+class TimeTicker extends TimeEvent {
+  final DateTime tick;
+  const TimeTicker({required this.tick});
+}
+
 class TimeStop extends TimeEvent {}

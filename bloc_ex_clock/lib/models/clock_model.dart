@@ -1,10 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 class Clock extends Equatable {
-  final DateTime dateTime;
-
-  const Clock({required this.dateTime});
+  const Clock();
 
   @override
-  List<Object?> get props => [dateTime];
+  List<Object?> get props => [];
+
+  Stream<DateTime> get ticker async* {
+    while (true) {
+      yield DateTime.now();
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
 }
