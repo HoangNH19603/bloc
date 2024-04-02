@@ -1,6 +1,6 @@
 part of 'time_bloc.dart';
 
-sealed class TimeEvent {
+abstract class TimeEvent {
   const TimeEvent();
 }
 

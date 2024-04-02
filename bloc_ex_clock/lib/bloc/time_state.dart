@@ -1,35 +1,22 @@
 part of 'time_bloc.dart';
 
 sealed class TimeState extends Equatable {
-  const TimeState();
+  const TimeState(this.currentTime);
+
+  final DateTime currentTime;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [currentTime];
 }
 
 final class TimeInitial extends TimeState {
-  final DateTime initialTime;
-
-  const TimeInitial({required this.initialTime});
-
-  @override
-  List<Object> get props => [initialTime];
+  const TimeInitial({required DateTime initialTime}) : super(initialTime);
 }
 
 final class TimeProcess extends TimeState {
-  final DateTime timeTicker;
-
-  const TimeProcess({required this.timeTicker});
-
-  @override
-  List<Object> get props => [timeTicker];
+  const TimeProcess({required timeTicker}) : super(timeTicker);
 }
 
 final class TimeRunPause extends TimeState {
-  final DateTime timeTicker;
-
-  const TimeRunPause({required this.timeTicker});
-
-  @override
-  List<Object> get props => [timeTicker];
+  const TimeRunPause({required timeOnStop}) : super(timeOnStop);
 }
