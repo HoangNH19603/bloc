@@ -14,4 +14,7 @@ class TimeTicker extends TimeEvent {
   const TimeTicker({required this.tick});
 }
 
-class TimeStop extends TimeEvent {}
+class TimeStop extends TimeEvent {
+  final DateTime tick;
+  const TimeStop({required this.tick});
+}

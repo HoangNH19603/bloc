@@ -10,6 +10,7 @@ class TimeWidget extends StatelessWidget {
     return BlocBuilder<TimeBloc, TimeState>(
       builder: (context, state) {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('${state.currentTime.day}/${state.currentTime.month}/${state.currentTime.year}'),
             Text('${state.currentTime.hour}:${state.currentTime.minute}:${state.currentTime.second}'),

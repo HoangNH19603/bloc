@@ -10,13 +10,13 @@ sealed class TimeState extends Equatable {
 }
 
 final class TimeInitial extends TimeState {
-  const TimeInitial({required DateTime initialTime}) : super(initialTime);
+  const TimeInitial(super.currentTime);
 }
 
 final class TimeProcess extends TimeState {
-  const TimeProcess({required timeTicker}) : super(timeTicker);
+  const TimeProcess(super.currentTime);
 }
 
 final class TimeRunPause extends TimeState {
-  const TimeRunPause({required timeOnStop}) : super(timeOnStop);
+  const TimeRunPause(super.currentTime);
 }

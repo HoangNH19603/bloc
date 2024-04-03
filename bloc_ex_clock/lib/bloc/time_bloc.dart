@@ -11,9 +11,10 @@ class TimeBloc extends Bloc<TimeEvent, TimeState> {
   final Clock clock;
   StreamSubscription<DateTime>? _tickerSubscription;
 
-  TimeBloc({required this.clock}) : super(TimeInitial(initialTime: DateTime.now())) {
+  TimeBloc({required this.clock}) : super(TimeInitial(DateTime.now())) {
+    _tickerSubscription = clock.ticker.listen((tick) => add(TimeTicker(tick: tick)));
     on<TimeStart>(_timeStart);
-    on<TimeTicker>(_timeContinue);
+    on<TimeTicker>(_timeTicked);
     on<TimeStop>(_timeStop);
   }
 
@@ -24,14 +25,16 @@ class TimeBloc extends Bloc<TimeEvent, TimeState> {
   }
 
   void _timeStart(TimeStart event, Emitter<TimeState> emit) {
-    _tickerSubscription?.cancel();
+    // _tickerSubscription?.cancel();
     _tickerSubscription = clock.ticker.listen((tick) => add(TimeTicker(tick: tick)));
   }
 
-  void _timeContinue(TimeTicker event, Emitter<TimeState> emit) {}
+  void _timeTicked(TimeTicker event, Emitter<TimeState> emit) {
+    emit(TimeProcess(DateTime.now()));
+  }
 
   void _timeStop(TimeStop event, Emitter<TimeState> emit) {
     _tickerSubscription?.pause();
-    emit(TimeRunPause(timeOnStop: DateTime.now()));
+    emit(TimeRunPause(DateTime.now()));
   }
 }
